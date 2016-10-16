@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+      <title> Mansi's Calculator </title>
+      <link rel='stylesheet' href='/stylesheets/style.css' />
+   </head>
+   <body>
+   		<br><br><br><br><br>
+   		<h1 align="center"> Mansi's Calculator</h1>	
+   		<div ng-app="calculator" ng-controller="CalController" align="center">
+   			<form>
+   				<br>
+   				<b>Enter First Number:<b>
+   				<input type="number" name ="no1" id ="no1" placeholder="First Number" ng-model = "no1" pattern ="[0-9]+" required></input><br> <br>
+   				Enter Second Number:
+   				<input type="number" name ="no2" id ="no2" placeholder="Second Number" ng-model = "no2" required></input><br> <br>
+   				<input type="submit" class ="button" value="Addition" ng-click="add()" name="add" id="add" >
+   				<input type="submit" class ="button" value="Subtraction" ng-click="sub()" name="sub" id="sub" ><br><br>
+   				<input type="submit" class ="button" value="Multiplication" ng-click="mul()" name="mul" id="mul" >
+   				<input type="submit" class ="button" value="Division" ng-click="div()" name="div" id="div" ><br><br>
+   			</form>
+   			output is: <label> {{output}} </label>
+   		</div>
+   			<script>
+   				var cal = angular.module("calculator", []);
+   				cal.controller("CalController", function ($scope, $http) {
+   					$scope.output = "";
+   					function calculate(){
+   						$http({
+   							url: '/calculate',
+   							method: 'POST',
+   							data: {"num1": $scope.no1, "num2": $scope.no2, "opr": $scope.opr}
+   						}).success(function (data, status, headers, config) {
+	         					console.log(data);
+	         					$scope.output = data;
+	         				}).error(function (data, status, headers, config) {
+	          						alert(status);
+	         					});
+     				};
+   				
+	         		$scope.add=function(){
+	         			$scope.opr="+";
+	         			calculate();
+	         		};
+	         		$scope.sub=function(){
+	         			$scope.opr="-";
+	         			calculate();
+	         		};
+	         		$scope.mul=function(){
+	         			$scope.opr="*";
+	         			calculate();
+	         		};
+	         		$scope.div=function(){
+	         			$scope.opr="/";
+	         			calculate();
+	         		};	
+   				});
+
+   			</script>
+   </body>
+</html>
